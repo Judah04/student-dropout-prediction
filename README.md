@@ -176,31 +176,24 @@ docker run -it --rm -p 9696:9696 student-dropout
 The image installs the locked dependencies, **trains the model during the build** (so the model always matches the
 installed scikit-learn), and starts the service on port 9696. Then use the same `curl` commands as above.
 
-## 9. Cloud deployment (Google Cloud Run)
 
-The container follows the Cloud Run convention of reading the port from the `PORT` environment variable, so it deploys
-as-is. Requires a Google Cloud project with billing enabled and the [`gcloud` CLI](https://cloud.google.com/sdk/docs/install).
+## 9. Deployed service
 
-```bash
-gcloud auth login
-gcloud config set project <PROJECT_ID>
-gcloud services enable run.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
+The API is deployed on Render (free tier, Docker):
 
-# Build from the Dockerfile in this folder and deploy
-gcloud run deploy student-dropout \
-    --source . \
-    --region <REGION> \
-    --allow-unauthenticated \
-    --port 9696
+- Base URL: https://student-dropout-prediction-ita9.onrender.com
+- Interactive docs: https://student-dropout-prediction-ita9.onrender.com/docs
+- Health check: https://student-dropout-prediction-ita9.onrender.com/health
 
-# Test the deployed service (use the URL printed by the command above)
-curl https://<SERVICE_URL>/health
-python test_request.py examples/dropout.json https://<SERVICE_URL>/predict
-```
+![Deployed API docs](images/docs-page.png)
+![Prediction request](images/predict-request.png)
+![Prediction response](images/predict-response.png)
 
-To avoid charges after testing: `gcloud run services delete student-dropout --region <REGION>`.
+Test it:
 
-**Deployed service:** _TODO: add the service URL, or a screenshot / short video of a successful prediction, after deploying._
+    python3 test_request.py examples/dropout.json https://student-dropout-prediction-ita9.onrender.com/predict
+
+
 
 ## 10. Limitations and next steps
 

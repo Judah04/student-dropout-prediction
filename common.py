@@ -32,7 +32,7 @@ def clean_column_name(name: str) -> str:
     """'Mother's qualification' -> 'mothers_qualification', 'Daytime/evening attendance\\t' -> 'daytime_evening_attendance'."""
     name = name.strip().lower().replace("'", "")
     name = re.sub(r"[^a-z0-9]+", "_", name).strip("_")
-    return "nationality" if name == "nacionality" else name  # the source file misspells it
+    return "nationality" if name == "nacionality" else name  
 
 
 def load_data(path: Path = DATA_PATH) -> pd.DataFrame:
